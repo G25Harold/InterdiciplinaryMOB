@@ -1,0 +1,8 @@
+﻿using Infra;
+using LinqToDB;
+using LinqToDB.Data;
+
+public class MyDatabaseConnection(DataOptions<MyDatabaseConnection> options) : DataConnection(options.Options)
+{
+    public ITable<Product> Products => this.GetTable<Product>();
+}
