@@ -6,7 +6,7 @@ using LinqToDB;
 
 public class ProductService(MyDatabaseConnection db)
 {
-    public List<Product> GetProducts(int page, int resultsPerPage)
+    public List<ProductDto> GetProducts(int page, int resultsPerPage)
     {
         if (page < 1)
             throw new ValidationException("Page must be 1 or higher");
@@ -17,7 +17,9 @@ public class ProductService(MyDatabaseConnection db)
             .ThenLoad(c => c.ProductsByCategory)
             .Take(resultsPerPage )
             .Skip((page - 1) * resultsPerPage)
+            .Select(ProductDto.Projection)
             .ToList();
+
 
     }
 }
