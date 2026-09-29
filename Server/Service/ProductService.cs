@@ -17,7 +17,11 @@ public class ProductService(MyDatabaseConnection db)
             .ThenLoad(c => c.ProductsByCategory)
             .Take(resultsPerPage )
             .Skip((page - 1) * resultsPerPage)
-            .Select(ProductDto.Projection)
+            .Select(p=>new ProductDto(p)
+            {
+                Category = new CategoryDto(p.Category)
+                
+            })
             .ToList();
 
 
