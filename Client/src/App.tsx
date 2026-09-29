@@ -10,7 +10,8 @@ export function App() {
     const [ products, setProducts ] = useState<ProductDto[]>([])
 
     useEffect(() => {
-        MyApi.getProducts.productGetProducts().then (r  => {
+        MyApi.getProducts.productGetProducts({page: 1,
+        resultsPerPage: 1}).then (r  => {
             const data   = r.data;
             setProducts(data)
             const p= data[0]!;
