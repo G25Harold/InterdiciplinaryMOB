@@ -13,6 +13,9 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApiDocument();
 builder.Services.AddCors();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<MyExceptionHandler>();
+
 var app = builder.Build();
 
 //where to move this to?? arrow down
@@ -20,17 +23,32 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetService<MyDatabaseConnection>();
     db.CreateTable<Product>(tableOptions:TableOptions.CreateIfNotExists);
+    db.CreateTable<Category>(tableOptions:TableOptions.CreateIfNotExists);
+    
+    if (db.Categories.Count() == 0)
+    {
+        db.Insert(new Category()
+        {
+            CategoryId = "1",
+            CategoryName = "Tree"
+        });
+    }
+    
     if (db.Products.Count() == 0)
     {
         db.Insert(new Product()
             {
-                ProductId = Guid.NewGuid().ToString(),
-                ProductName = "Apple"
+                ProductId = "1",
+                ProductName = "Apple",
+                CategoryId = "1"
             });
     }
     
+    
+    
 }
 
+app.UseExceptionHandler();
 app.UseCors(config =>config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().SetIsOriginAllowed(_ => true));
 app.MapControllers();
 app.UseOpenApi();
