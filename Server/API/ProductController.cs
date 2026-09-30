@@ -7,5 +7,12 @@ public class ProductController(ProductService service) : ControllerBase
     public List<ProductDto> GetProducts(int page, int resultsPerPage)
     {
         return service.GetProducts(page, resultsPerPage);
-    } 
+    }
+
+    [HttpPost(nameof(CreateProduct))]
+
+    public ProductDto CreateProduct(CreateProductRequestDto productRequestDto)
+    {
+      return service.CreateProduct(productRequestDto);
+    }
 }

@@ -19,14 +19,19 @@ export function App() {
 
         })
     },[] );
-    
-  return (
+
+    function createProduct() {
+        MyApi.createProduct.productCreateProduct()
+    }
+
+    return (
     <div className="app">
         {
        products.map(p => {
            return <div key={p.productId}>{p.productName} </div>
        })
         }
+        <button onClick={createProduct}>Create Product</button>
     </div>
   );
 }

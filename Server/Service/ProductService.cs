@@ -26,4 +26,27 @@ public class ProductService(MyDatabaseConnection db)
 
 
     }
+
+    public ProductDto CreateProduct(CreateProductRequestDto productRequestDto)
+    {
+        if (productRequestDto.ProductPrice <0 )
+            throw new ValidationException("Price must be greater than 0");
+        
+        var p = new Product()
+        {
+            ProductId = Guid.NewGuid().ToString(),
+            ProductName = productRequestDto.ProductName,
+            ProductPrice = productRequestDto.ProductPrice,
+            CategoryId = productRequestDto.CategoryId,
+
+        };
+        
+        db.Insert(p);
+        return new ProductDto(p);
+    }
 }
+
+/* public string productName { get; set; }
+    public string productDescription { get; set; }
+    public string productCategory { get; set; }
+    public decimal productPrice { get; set; }*/

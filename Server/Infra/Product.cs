@@ -6,9 +6,13 @@ namespace Infra;
 {
     [PrimaryKey] public string ProductId { get; set; }
     public string ProductName { get; set; }
+    
+    public decimal ProductPrice { get; set; }
     public string CategoryId { get; set; }
     [Association(ThisKey = nameof(CategoryId),OtherKey = nameof (Category.CategoryId))]
     public Category Category { get; set; }
+    
+    
 }
 
 public class Category
@@ -20,16 +24,3 @@ public class Category
     public List<Product> ProductsByCategory { get; set; }
 }
 
-public class ProductDto
-{
-    public string ProductId { get; set; }
-    public string ProductName { get; set; }
-    public string CategoryId { get; set; }
-    public CategoryDto Category { get; set; }
-}
-
-public class CategoryDto
-{
-    public string CategoryId { get; set; }
-    public string CategoryName { get; set; }
-}
