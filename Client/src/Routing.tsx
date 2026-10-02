@@ -1,7 +1,7 @@
 import {createBrowserRouter, type RouteObject, RouterProvider} from "react-router";
 import App from "@/App.tsx";
-import LoginPage from "@/LoginPage.tsx";
-import CreateUserPage from "@/CreateUserPage.tsx";
+import {LoginPage} from "@/LoginPage.tsx";
+import {CreateUserPage} from "@/CreateUserPage.tsx";
 import ProductPage from "@/ProductPage.tsx";
 
 const routes: RouteObject[] =[
