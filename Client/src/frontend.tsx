@@ -8,11 +8,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import {Routing} from "@/Routing.tsx";
 
 const elem = document.getElementById("root")!;
 const app = (
   <StrictMode>
-    <App />
+    <Routing />
   </StrictMode>
 );
 

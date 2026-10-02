@@ -1,39 +1,17 @@
-
 import "./index.css";
+import {useNavigate} from "react-router";
 
-import {Api, type ProductDto} from "../Api.ts";
-import {useEffect, useState} from "react";
-
-const MyApi= new Api();
 export function App() {
-
-    const [ products, setProducts ] = useState<ProductDto[]>([])
-
-    useEffect(() => {
-        MyApi.getProducts.productGetProducts({page: 1,
-        resultsPerPage: 1}).then (r  => {
-            const data   = r.data;
-            setProducts(data)
-            const p= data[0]!;
-            p.category?.categoryId
-
-        })
-    },[] );
-
-    function createProduct() {
-        MyApi.createProduct.productCreateProduct()
-    }
+    const navigate = useNavigate();
 
     return (
-    <div className="app">
-        {
-       products.map(p => {
-           return <div key={p.productId}>{p.productName} </div>
-       })
-        }
-        <button onClick={createProduct}>Create Product</button>
-    </div>
-  );
+        <div className="app">
+            <h1>Welcome To My Amazing Satin Road</h1>
+            <button onClick={() => navigate("/login")}>Log In</button>
+            <button onClick={() => navigate("/create-user")}>Create user</button>
+        </div>
+    );
 }
 
 export default App;
+
