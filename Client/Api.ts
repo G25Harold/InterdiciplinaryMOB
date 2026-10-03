@@ -36,7 +36,7 @@ export interface CreateUserRequestDto {
 }
 
 export interface LoginRequestDto {
-  userName?: string;
+  username?: string;
   password?: string;
 }
 

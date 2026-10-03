@@ -42,7 +42,7 @@ public class UserService(
     public UserDto? Login(LoginRequestDto loginRequestDto)
     {
         var user = db.Users
-            .FirstOrDefault(u => u.Username == loginRequestDto.UserName);
+            .FirstOrDefault(u => u.Username == loginRequestDto.Username);
         
         if (user == null)
             return null;
