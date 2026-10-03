@@ -6,4 +6,7 @@ public class MyDatabaseConnection(DataOptions<MyDatabaseConnection> options) : D
 {
     public ITable<Product> Products => this.GetTable<Product>();
     public ITable<Category> Categories => this.GetTable<Category>();
+    
+    public ITable<User> Users => this.GetTable<User>();
+    
 }

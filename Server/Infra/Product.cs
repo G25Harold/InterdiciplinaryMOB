@@ -23,4 +23,3 @@ public class Category
     [Association (ThisKey = nameof(CategoryId), OtherKey = nameof(Product.CategoryId))]
     public List<Product> ProductsByCategory { get; set; }
 }
-
