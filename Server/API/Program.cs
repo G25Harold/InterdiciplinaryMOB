@@ -9,7 +9,7 @@ var options = new DataOptions<MyDatabaseConnection>(
 
 builder.Services.AddScoped<MyDatabaseConnection>(_ => 
     new MyDatabaseConnection(options));
-
+builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
@@ -22,35 +22,10 @@ builder.Services.AddExceptionHandler<MyExceptionHandler>();
 
 var app = builder.Build();
 
-//where to move this to?? arrow down : create seeder
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetService<MyDatabaseConnection>();
-    db.CreateTable<Product>(tableOptions:TableOptions.CreateIfNotExists);
-    db.CreateTable<Category>(tableOptions:TableOptions.CreateIfNotExists);
-    db.CreateTable<User>(tableOptions:TableOptions.CreateIfNotExists);
-    
-    if (db.Categories.Count() == 0)
-    {
-        db.Insert(new Category()
-        {
-            CategoryId = "1",
-            CategoryName = "Tree"
-        });
-    }
-    
-    if (db.Products.Count() == 0)
-    {
-        db.Insert(new Product()
-            {
-                ProductId = "1",
-                ProductName = "Apple",
-                CategoryId = "1"
-            });
-    }
-    
-    
-    
+    var seeder = scope.ServiceProvider.GetService<Seeder>();
+    seeder.Seed();
 }
 
 app.UseExceptionHandler();
