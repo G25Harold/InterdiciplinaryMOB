@@ -1,7 +1,10 @@
 ﻿using Infra;
 using LinqToDB;
+using Service.Security;
 
-public class Seeder(MyDatabaseConnection db)
+public class Seeder(MyDatabaseConnection db,
+    IPasswordHasher passwordHasher,
+    IConfiguration configuration)
 {
     public void Seed()
     {
@@ -25,6 +28,20 @@ public class Seeder(MyDatabaseConnection db)
                 ProductId = "1",
                 ProductName = "Apple",
                 CategoryId = "1"
+            });
+        }
+        var adminPassword = configuration["SeedAdmin:Password"];
+
+        if (!string.IsNullOrWhiteSpace(adminPassword) &&
+            !db.Users.Any(u => u.Username == "admin"))
+        {
+            db.Insert(new User
+            {
+                UserId = Guid.NewGuid().ToString(),
+                Username = "admin",
+                PasswordHash =
+                    passwordHasher.HashAndSaltPassword(adminPassword),
+                Role = UserRoles.Admin
             });
         }
     }

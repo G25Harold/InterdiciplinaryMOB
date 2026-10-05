@@ -33,7 +33,7 @@ public class UserService(
             UserId = Guid.NewGuid().ToString(),
             Username = userRequestDto.Username,
             PasswordHash = passwordHash,
-            Role = "User"
+            Role = UserRoles.User
         };
         db.Insert(user);
 
