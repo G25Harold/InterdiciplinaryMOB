@@ -11,12 +11,12 @@ public class UserController(UserService service) : ControllerBase
    }
 
    [HttpPost("login")]
-   public ActionResult<UserDto> Login(LoginRequestDto loginRequestDto)
+   public ActionResult<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
 
    {
-      var user = service.Login(loginRequestDto);
-      if (user is null)
+      var result = service.Login(loginRequestDto);
+      if (result is null)
          return Unauthorized();
-      return Ok(user);
+      return Ok(result);
    }
 }
