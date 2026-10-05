@@ -1,9 +1,10 @@
-import {Api} from "../Api.ts";
+
 import {type FormEvent, useState} from "react";
 import {useNavigate} from "react-router";
 import toast from "react-hot-toast";
+import {api, setAuthToken} from "@/apiClient.ts";
 
-const api = new Api();
+
 
 export function LoginPage() {
     const [username,setUsername] = useState("");
@@ -25,8 +26,12 @@ export function LoginPage() {
                 password
             });
             console.log("logged in user", response.data);
+            setAuthToken(response.data.token);
 
-            toast.success(`Welcome ${response.data.username}!`);
+            sessionStorage.setItem("user", JSON.stringify(response.data.user));
+
+            toast.success(`Welcome ${response.data.username} !}`);
+
             navigate("/products");
         } catch (error) {
             console.log(error);

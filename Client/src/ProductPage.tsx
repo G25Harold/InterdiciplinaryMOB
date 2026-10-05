@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Api, type ProductDto} from "../Api.ts";
+import {LogoutButton} from "@/components/LogoutButton.tsx";
 const MyApi= new Api();
 
 
@@ -25,6 +26,7 @@ export function ProductPage() {
         }
 
         return (
+
             <div className="app">
                 {
                     products.map(p => {
@@ -32,6 +34,7 @@ export function ProductPage() {
                     })
                 }
                 <button onClick={createProduct}>Create Product</button>
+                <LogoutButton/>
             </div>
         );
     }
