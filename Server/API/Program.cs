@@ -64,7 +64,7 @@ builder.Services.AddScoped<ITokenService>(_ => new JwtTokenService(
 
 builder.Services.AddScoped<MyDatabaseConnection>(_ =>
     new MyDatabaseConnection(options));
-
+builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
@@ -79,7 +79,6 @@ builder.Services.AddExceptionHandler<MyExceptionHandler>();
 
 var app = builder.Build();
 
-//where to move this to?? arrow down : create seeder
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetService<Seeder>();
