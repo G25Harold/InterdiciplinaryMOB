@@ -6,6 +6,7 @@
 using System.ComponentModel.DataAnnotations;
 using Infra;
 using LinqToDB;
+using Service.RequestDtos;
 using Service.Security;
 
 public class UserService(
@@ -62,5 +63,14 @@ public class UserService(
             Token = tokenService.CreateToken(user),
             User = new UserDto(user)
         };
+    }
+
+    public object? GetById(string userId)
+    {
+        var user = db.Users
+            .FirstOrDefault(u => u.UserId == userId);
+        return user is null
+            ? null
+            : new UserDto(user);
     }
 }

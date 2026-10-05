@@ -12,17 +12,17 @@ var options = new DataOptions<MyDatabaseConnection>(
     new DataOptions().UseSQLite (" Data Source=../Infra/db.db"));
 
 
-var jwtKey= builder.Configuration["JwtKey"]
-           ?? throw new InvalidOperationException("Jwt: Key is missing");
+var jwtKey= builder.Configuration["Jwt:Key"] 
+            ?? throw new InvalidOperationException("Jwt: Key is missing");
 
-var jwtIssuer = builder.Configuration["JwtIssuer"]
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]
     ?? throw new InvalidOperationException("Jwt: Issuer is missing");
 
-var jwtAudience = builder.Configuration["JwtAudience"]
+var jwtAudience = builder.Configuration["Jwt:Audience"]
     ?? throw new InvalidOperationException("Jwt: Audience is missing");
 
 var jwtExpiresMinutes = builder.Configuration.GetValue<int>(
-    "JwtExpiresMinutes",
+    "Jwt:ExpiresMinutes",
     60);
 
 //Jwt config validation(below)
@@ -64,6 +64,7 @@ builder.Services.AddScoped<ITokenService>(_ => new JwtTokenService(
 
 builder.Services.AddScoped<MyDatabaseConnection>(_ =>
     new MyDatabaseConnection(options));
+
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
