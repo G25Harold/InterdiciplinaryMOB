@@ -2,5 +2,5 @@
 using Facet;
 using Infra;
 
-[Facet(sourceType: typeof(Product), exclude:[nameof(Product.Category), nameof(Product.ProductId)])]
+[Facet(sourceType: typeof(Product), exclude: [nameof(Product.Category), nameof(Product.ProductId), nameof(Product.SellerId)])]
 public partial class CreateProductRequestDto;

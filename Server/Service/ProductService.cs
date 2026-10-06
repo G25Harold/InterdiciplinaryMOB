@@ -27,12 +27,17 @@ public class ProductService(MyDatabaseConnection db)
 
     }
 
-    public ProductDto CreateProduct(CreateProductRequestDto productRequestDto)
+    public ProductDto CreateProduct(CreateProductRequestDto productRequestDto, string sellerId)
     {
         if (productRequestDto.ProductPrice <0 )
             throw new ValidationException("Price must be greater than 0");
+        if (productRequestDto.Inventory <0)
+            throw new ValidationException("Inventory cant't be less than 0");
+        if (db.Categories.Any(
+                c=> c.CategoryId == productRequestDto.CategoryId))
+            throw new ValidationException("Category doesn't exist");
         
-        var p = new Product()
+        var p = new Product
         {
             ProductId = Guid.NewGuid().ToString(),
             ProductName = productRequestDto.ProductName,
