@@ -16,7 +16,17 @@ public class ProductController(ProductService service) : ControllerBase
     {
         var sellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (sellerId is null)
-            throw new UnauthorizedAccessException();
-      return service.CreateProduct(dto, sellerId);
+            throw new UnauthorizedAccessException(); 
+        return service.CreateProduct(dto, sellerId);
+    }
+
+    [HttpGet("mine")]
+    public ActionResult<List<ProductDto>> GetMyProducts()
+    {
+        var sellerId =
+            User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (sellerId is null)
+            return Unauthorized();
+        return Ok(service.GetMyProducts(sellerId));
     }
 }

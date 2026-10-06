@@ -505,4 +505,22 @@ export class Api<
         ...params,
       }),
   };
+  mine = {
+    /**
+     * No description
+     *
+     * @tags Product
+     * @name ProductGetMyProducts
+     * @request GET:/mine
+     * @secure
+     */
+    productGetMyProducts: (params: RequestParams = {}) =>
+      this.request<ProductDto[], any>({
+        path: `/mine`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
 }

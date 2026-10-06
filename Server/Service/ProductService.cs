@@ -13,6 +13,7 @@ public class ProductService(MyDatabaseConnection db)
         if (resultsPerPage < 20)
             throw new ValidationException("Must have 1 or more results per page");
         return db.Products
+                
             .LoadWith(p=>p.Category)
             .ThenLoad(c => c.ProductsByCategory)
             .Take(resultsPerPage )
@@ -25,6 +26,17 @@ public class ProductService(MyDatabaseConnection db)
             .ToList();
 
 
+    }
+
+    public List<ProductDto> GetMyProducts(string sellerId)
+    {
+        return db.Products
+            .Where(p=> p.SellerId == sellerId)
+            .Select(p=> new ProductDto(p)
+            {
+                Category = new CategoryDto(p.Category)
+            })
+            .ToList();
     }
 
     public ProductDto CreateProduct(CreateProductRequestDto productRequestDto, string sellerId)
