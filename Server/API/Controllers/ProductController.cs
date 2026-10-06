@@ -1,6 +1,7 @@
 ﻿using Infra;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+[Authorize]
 public class ProductController(ProductService service) : ControllerBase
 {
     [HttpGet(nameof(GetProducts))]

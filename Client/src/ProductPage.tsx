@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import {Api, type ProductDto} from "../Api.ts";
+import {type ProductDto} from "../Api.ts";
 import {LogoutButton} from "@/components/LogoutButton.tsx";
-const MyApi= new Api();
+import {api} from "@/apiClient.ts";
 
 
 export function ProductPage() {
@@ -11,7 +11,7 @@ export function ProductPage() {
         const [ products, setProducts ] = useState<ProductDto[]>([])
 
         useEffect(() => {
-            MyApi.getProducts.productGetProducts({page: 1,
+            api.getProducts.productGetProducts({page: 1,
                 resultsPerPage: 1}).then (r  => {
                 const data   = r.data;
                 setProducts(data)
@@ -22,7 +22,7 @@ export function ProductPage() {
         },[] );
 
         function createProduct() {
-            MyApi.createProduct.productCreateProduct()
+            api.createProduct.productCreateProduct()
         }
 
         return (

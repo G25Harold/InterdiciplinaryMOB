@@ -21,7 +21,7 @@ const routes: RouteObject[] = [
         element: <CreateUserPage/>
     },
     {
-        path: "admin/categories",
+        path: "/admin/categories",
         element: <AdminRoute>
             <CategoryPage/>
         </AdminRoute>
