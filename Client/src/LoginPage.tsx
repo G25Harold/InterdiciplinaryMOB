@@ -2,8 +2,8 @@
 import {type FormEvent, useState} from "react";
 import {useNavigate} from "react-router";
 import toast from "react-hot-toast";
-import {api, setAuthToken} from "@/apiClient.ts";
-
+import {api} from "@/apiClient.ts";
+import {useAuth} from "@/AuthContext.tsx";
 
 
 export function LoginPage() {
@@ -11,6 +11,7 @@ export function LoginPage() {
     const [password,setPassword] = useState("");
 
     const navigate = useNavigate();
+    const {login}= useAuth();
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
@@ -21,16 +22,18 @@ export function LoginPage() {
         }
 
         try {
+
             const response = await api.api.userLogin({
                 username: username,
                 password
             });
             console.log("logged in user", response.data);
-            setAuthToken(response.data.token);
+            login(response.data.token!,
+                response.data.user!);
 
-            sessionStorage.setItem("user", JSON.stringify(response.data.user));
 
-            toast.success(`Welcome ${response.data.username} !}`);
+
+            toast.success(`Welcome ${response.data.user?.username} !}`);
 
             navigate("/products");
         } catch (error) {
