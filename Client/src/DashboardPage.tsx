@@ -3,11 +3,12 @@ import type {ProductDto} from "../Api.ts";
 import {api} from "@/apiClient.ts";
 import toast from "react-hot-toast";
 import {LogoutButton} from "@/components/LogoutButton.tsx";
+import {useNavigate} from "react-router";
 
 export  function DashboardPage() {
 
     const [products, setProducts] = useState<ProductDto[]>([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
         api.mine.productGetMyProducts()
 
@@ -24,6 +25,7 @@ export  function DashboardPage() {
     }, []);
     return (
         <div>
+            <button onClick={() => navigate("/create-listing")}>Create Listing</button>
             <h1>My Listings</h1>
 
             {products.map(product => (

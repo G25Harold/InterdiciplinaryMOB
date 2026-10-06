@@ -24,8 +24,8 @@ export function LoginPage() {
         try {
 
             const response = await api.api.userLogin({
-                username: username,
-                password
+                username: username.trim(),
+                password: password.trim(),
             });
             console.log("logged in user", response.data);
             login(response.data.token!,
