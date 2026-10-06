@@ -10,7 +10,7 @@ public class ProductService(MyDatabaseConnection db)
     {
         if (page < 1)
             throw new ValidationException("Page must be 1 or higher");
-        if (resultsPerPage < 1)
+        if (resultsPerPage < 20)
             throw new ValidationException("Must have 1 or more results per page");
         return db.Products
             .LoadWith(p=>p.Category)

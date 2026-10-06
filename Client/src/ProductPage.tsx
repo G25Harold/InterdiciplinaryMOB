@@ -2,41 +2,52 @@ import {useEffect, useState} from "react";
 import {type ProductDto} from "../Api.ts";
 import {LogoutButton} from "@/components/LogoutButton.tsx";
 import {api} from "@/apiClient.ts";
+import toast from "react-hot-toast";
 
 
-export function ProductPage() {
-
-
+export default function ProductPage() {
 
         const [ products, setProducts ] = useState<ProductDto[]>([])
 
         useEffect(() => {
-            api.getProducts.productGetProducts({page: 1,
-                resultsPerPage: 1}).then (r  => {
-                const data   = r.data;
-                setProducts(data)
-                const p= data[0]!;
-                p.category?.categoryId
-
+            api.getProducts.productGetProducts({
+                page: 1,
+                resultsPerPage: 20
             })
+                .then(response=> {
+                    setProducts(response.data);
+
+        })
+                .catch(error=>{
+                    console.log(error);
+                    toast.error("Could not load products.");
+                });
+
+
+
         },[] );
-
-        function createProduct() {
-            api.createProduct.productCreateProduct()
-        }
-
         return (
-
             <div className="app">
+                <h1>Products</h1>
+
                 {
-                    products.map(p => {
-                        return <div key={p.productId}>{p.productName} </div>
-                    })
+                    products.map(product => (
+                        <div key={product.productId}>
+                            <h2>{product.productName}</h2>
+
+                            <p>Price: {product.productPrice}</p>
+                            <p>Inventory: {product.inventory}</p>
+                            <p>Seller: {product.sellerId}</p>
+                            <p>
+                                Category: {product.category?.categoryName}
+                            </p>
+                        </div>
+                    ))
                 }
-                <button onClick={createProduct}>Create Product</button>
-                <LogoutButton/>
+
+                <LogoutButton />
             </div>
         );
     }
 
-    export default ProductPage;
+
