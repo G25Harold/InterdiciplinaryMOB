@@ -33,7 +33,7 @@ public class ProductService(MyDatabaseConnection db)
             throw new ValidationException("Price must be greater than 0");
         if (productRequestDto.Inventory <0)
             throw new ValidationException("Inventory cant't be less than 0");
-        if (db.Categories.Any(
+        if (!db.Categories.Any(
                 c=> c.CategoryId == productRequestDto.CategoryId))
             throw new ValidationException("Category doesn't exist");
         
@@ -43,6 +43,8 @@ public class ProductService(MyDatabaseConnection db)
             ProductName = productRequestDto.ProductName,
             ProductPrice = productRequestDto.ProductPrice,
             CategoryId = productRequestDto.CategoryId,
+            Inventory = productRequestDto.Inventory,
+            SellerId = sellerId
 
         };
         

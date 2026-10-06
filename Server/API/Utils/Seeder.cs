@@ -62,7 +62,7 @@ public class Seeder(
                 ProductPrice = 10,
                 Inventory = 100,
                 CategoryId = "1",
-                SellerId = "seller.UserId"
+                SellerId = seller.UserId
             });
         }
 

@@ -29,7 +29,10 @@ export interface ProductDto {
   productName?: string;
   /** @format decimal */
   productPrice?: number;
+  /** @format int32 */
+  inventory?: number;
   categoryId?: string;
+  sellerId?: string;
 }
 
 export interface UserDto {
@@ -487,6 +490,8 @@ export class Api<
         ProductName?: string;
         /** @format decimal */
         ProductPrice?: number;
+        /** @format int32 */
+        Inventory?: number;
         CategoryId?: string;
       },
       params: RequestParams = {},
