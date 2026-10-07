@@ -40,6 +40,7 @@ export default function ProductPage() {
                             <p>
                                 Category: {product.category?.categoryName}
                             </p>
+                            <p>Seller: {product.sellerUsername}</p>
                         </div>
                     ))
                 }

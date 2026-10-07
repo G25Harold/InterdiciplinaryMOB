@@ -25,6 +25,7 @@ export interface UpdateCategoryRequestDto {
 
 export interface ProductDto {
   category?: CategoryDto;
+  sellerUsername?: string;
   productId?: string;
   productName?: string;
   /** @format decimal */
@@ -33,6 +34,14 @@ export interface ProductDto {
   inventory?: number;
   categoryId?: string;
   sellerId?: string;
+  seller?: User;
+}
+
+export interface User {
+  userId?: string;
+  username?: string;
+  passwordHash?: string;
+  role?: string;
 }
 
 export interface UserDto {
@@ -493,6 +502,10 @@ export class Api<
         /** @format int32 */
         Inventory?: number;
         CategoryId?: string;
+        "Seller.UserId"?: string;
+        "Seller.Username"?: string;
+        "Seller.PasswordHash"?: string;
+        "Seller.Role"?: string;
       },
       params: RequestParams = {},
     ) =>
@@ -541,6 +554,10 @@ export class Api<
         /** @format int32 */
         Inventory?: number;
         CategoryId?: string;
+        "Seller.UserId"?: string;
+        "Seller.Username"?: string;
+        "Seller.PasswordHash"?: string;
+        "Seller.Role"?: string;
       },
       params: RequestParams = {},
     ) =>
