@@ -16,11 +16,13 @@ public class ProductService(MyDatabaseConnection db)
                 
             .LoadWith(p=>p.Category)
             .ThenLoad(c => c.ProductsByCategory)
+            .LoadWith(p=>p.Seller)
             .Take(resultsPerPage )
             .Skip((page - 1) * resultsPerPage)
             .Select(p=>new ProductDto(p)
             {
-                Category = new CategoryDto(p.Category)
+                Category = new CategoryDto(p.Category),
+                SellerUsername = p.Seller.Username
                 
             })
             .ToList();

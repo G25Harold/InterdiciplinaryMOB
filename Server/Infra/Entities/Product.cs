@@ -16,4 +16,9 @@ namespace Infra;
     [Association(ThisKey = nameof(CategoryId),OtherKey = nameof (Category.CategoryId))]
     public Category Category { get; set; }
     
+    [Association(
+        ThisKey = nameof(SellerId),
+        OtherKey = nameof(User.UserId))]
+    public User Seller { get; set; }
+    
 }
