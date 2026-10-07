@@ -12,6 +12,7 @@ public class Seeder(
         db.CreateTable<Product>(tableOptions: TableOptions.CreateIfNotExists);
         db.CreateTable<Category>(tableOptions: TableOptions.CreateIfNotExists);
         db.CreateTable<User>(tableOptions: TableOptions.CreateIfNotExists);
+        db.CreateTable<Order>(tableOptions: TableOptions.CreateIfNotExists);
         
         var adminPassword = configuration["SeedAdmin:Password"];
 

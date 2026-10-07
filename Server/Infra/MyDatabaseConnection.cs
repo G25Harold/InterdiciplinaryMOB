@@ -4,9 +4,11 @@ using LinqToDB.Data;
 
 public class MyDatabaseConnection(DataOptions<MyDatabaseConnection> options) : DataConnection(options.Options)
 {
-    public ITable<Product> Products => this.GetTable<Product>();
+    public ITable<Product> Products => this.GetTable<Product>(); 
     public ITable<Category> Categories => this.GetTable<Category>();
     
     public ITable<User> Users => this.GetTable<User>();
+    
+    public ITable<Order> Orders => this.GetTable<Order>();
     
 }
