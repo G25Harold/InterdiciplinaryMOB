@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {type ProductDto} from "../Api.ts";
+import {type ProductDto} from "../../Api.ts";
 import {LogoutButton} from "@/components/LogoutButton.tsx";
 import {api} from "@/apiClient.ts";
 import toast from "react-hot-toast";
