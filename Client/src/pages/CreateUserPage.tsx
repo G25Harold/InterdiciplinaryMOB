@@ -2,6 +2,7 @@ import {type FormEvent, useState} from "react";
 import {useNavigate} from "react-router";
 import toast from "react-hot-toast";
 import {Api} from "../../Api.ts";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 const api = new Api();
 
@@ -36,6 +37,7 @@ export function CreateUserPage() {
 
     return (
         <div>
+            <NavigationButtons />
             <h1>Create User</h1>
 
             <form onSubmit={handleSubmit}>

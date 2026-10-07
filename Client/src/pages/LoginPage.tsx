@@ -4,6 +4,7 @@ import {useNavigate} from "react-router";
 import toast from "react-hot-toast";
 import {api} from "@/apiClient.ts";
 import {useAuth} from "@/AuthContext.tsx";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 
 export function LoginPage() {
@@ -43,6 +44,7 @@ export function LoginPage() {
     }
     return(
     <div>
+        <NavigationButtons />
         <h1> Login </h1>
         <form onSubmit={handleSubmit}>
 

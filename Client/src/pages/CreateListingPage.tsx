@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import type { CategoryDto } from "@/Api.ts";
 import { api } from "@/apiClient.ts";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 export function CreateListingPage() {
     const [productName, setProductName] = useState("");
@@ -57,6 +58,7 @@ export function CreateListingPage() {
 
     return (
         <div>
+            <NavigationButtons />
             <h1>Create Listing</h1>
 
             <form onSubmit={handleSubmit}>
@@ -131,12 +133,7 @@ export function CreateListingPage() {
                     Create Listing
                 </button>
 
-                <button
-                    type="button"
-                    onClick={() => navigate("/dashboard")}
-                >
-                    Cancel
-                </button>
+                <button type="button" onClick={() => navigate("/dashboard")}>Cancel</button>
             </form>
         </div>
     );

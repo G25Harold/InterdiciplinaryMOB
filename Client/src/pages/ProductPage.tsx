@@ -3,6 +3,7 @@ import {type ProductDto} from "../../Api.ts";
 import {LogoutButton} from "@/components/LogoutButton.tsx";
 import {api} from "@/apiClient.ts";
 import toast from "react-hot-toast";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 
 export default function ProductPage() {
@@ -64,6 +65,7 @@ export default function ProductPage() {
 
         return (
             <div className="app">
+                <NavigationButtons />
                 <h1>Products</h1>
 
                 {
@@ -108,7 +110,6 @@ export default function ProductPage() {
                     ))
                 }
 
-                <LogoutButton/>
             </div>
         );
     }
