@@ -10,18 +10,94 @@
  * ---------------------------------------------------------------
  */
 
-export interface ProductDto {
-  category?: CategoryDto;
+export interface CategoryDto {
+  categoryId?: string;
+  categoryName?: string;
+}
+
+export interface CreateCategoryRequestDto {
+  categoryName?: string;
+}
+
+export interface UpdateCategoryRequestDto {
+  categoryName?: string;
+}
+
+export interface Order {
+  orderId?: string;
+  buyerId?: string;
+  productId?: string;
+  sellerId?: string;
+  /** @format int32 */
+  quantity?: number;
+  /** @format decimal */
+  productPrice?: number;
+  /** @format date-time */
+  orderDate?: string;
+  buyer?: User;
+  product?: Product;
+  seller?: User;
+}
+
+export interface User {
+  userId?: string;
+  username?: string;
+  passwordHash?: string;
+  role?: string;
+}
+
+export interface Product {
   productId?: string;
   productName?: string;
   /** @format decimal */
   productPrice?: number;
+  /** @format int32 */
+  inventory?: number;
   categoryId?: string;
+  sellerId?: string;
+  category?: Category;
+  seller?: User;
 }
 
-export interface CategoryDto {
+export interface Category {
   categoryId?: string;
   categoryName?: string;
+  productsByCategory?: Product[];
+}
+
+export interface CreateOrderRequestDto {
+  productId?: string;
+  /** @format int32 */
+  quantity?: number;
+}
+
+export interface OrderDto {
+  productName?: string;
+  sellerUsername?: string;
+  orderId?: string;
+  buyerId?: string;
+  productId?: string;
+  sellerId?: string;
+  /** @format int32 */
+  quantity?: number;
+  /** @format decimal */
+  productPrice?: number;
+  /** @format date-time */
+  orderDate?: string;
+}
+
+export interface ProductDto {
+  category?: CategoryDto;
+  sellerUsername?: string;
+  productId?: string;
+  productName?: string;
+  /** @format decimal */
+  productPrice?: number;
+  /** @format int32 */
+  inventory?: number;
+  categoryId?: string;
+  sellerId?: string;
+  seller?: User;
 }
 
 export interface UserDto {
@@ -33,6 +109,11 @@ export interface UserDto {
 export interface CreateUserRequestDto {
   password?: string;
   username?: string;
+}
+
+export interface LoginResponseDto {
+  token?: string;
+  user?: UserDto;
 }
 
 export interface LoginRequestDto {
@@ -303,57 +384,124 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
-  getProducts = {
-    /**
-     * No description
-     *
-     * @tags Product
-     * @name ProductGetProducts
-     * @request GET:/GetProducts
-     */
-    productGetProducts: (
-      query?: {
-        /** @format int32 */
-        page?: number;
-        /** @format int32 */
-        resultsPerPage?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ProductDto[], any>({
-        path: `/GetProducts`,
-        method: "GET",
-        query: query,
-        format: "json",
-        ...params,
-      }),
-  };
-  createProduct = {
-    /**
-     * No description
-     *
-     * @tags Product
-     * @name ProductCreateProduct
-     * @request POST:/CreateProduct
-     */
-    productCreateProduct: (
-      query?: {
-        ProductName?: string;
-        /** @format decimal */
-        ProductPrice?: number;
-        CategoryId?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ProductDto, any>({
-        path: `/CreateProduct`,
-        method: "POST",
-        query: query,
-        format: "json",
-        ...params,
-      }),
-  };
   api = {
+    /**
+     * No description
+     *
+     * @tags Category
+     * @name CategoryGetCategories
+     * @request GET:/api/category
+     * @secure
+     */
+    categoryGetCategories: (params: RequestParams = {}) =>
+      this.request<CategoryDto[], any>({
+        path: `/api/category`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Category
+     * @name CategoryCreateCategory
+     * @request POST:/api/category
+     * @secure
+     */
+    categoryCreateCategory: (
+      data: CreateCategoryRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<CategoryDto, any>({
+        path: `/api/category`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Category
+     * @name CategoryUpdateCategory
+     * @request PUT:/api/category/{id}
+     * @secure
+     */
+    categoryUpdateCategory: (
+      id: string,
+      data: UpdateCategoryRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<CategoryDto, any>({
+        path: `/api/category/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Category
+     * @name CategoryDeleteCategory
+     * @request DELETE:/api/category/{id}
+     * @secure
+     */
+    categoryDeleteCategory: (id: string, params: RequestParams = {}) =>
+      this.request<Blob, any>({
+        path: `/api/category/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Order
+     * @name OrderCreateOrder
+     * @request POST:/api/Order/CreateOrder
+     * @secure
+     */
+    orderCreateOrder: (
+      data: CreateOrderRequestDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<Order, any>({
+        path: `/api/Order/CreateOrder`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Order
+     * @name OrderGetMyOrders
+     * @request GET:/api/Order/GetMyOrders
+     * @secure
+     */
+    orderGetMyOrders: (params: RequestParams = {}) =>
+      this.request<OrderDto[], any>({
+        path: `/api/Order/GetMyOrders`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
     /**
      * No description
      *
@@ -379,12 +527,157 @@ export class Api<
      * @request POST:/api/User/login
      */
     userLogin: (data: LoginRequestDto, params: RequestParams = {}) =>
-      this.request<UserDto, any>({
+      this.request<LoginResponseDto, any>({
         path: `/api/User/login`,
         method: "POST",
         body: data,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserMe
+     * @request GET:/api/User/me
+     * @secure
+     */
+    userMe: (params: RequestParams = {}) =>
+      this.request<UserDto, any>({
+        path: `/api/User/me`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  getProducts = {
+    /**
+     * No description
+     *
+     * @tags Product
+     * @name ProductGetProducts
+     * @request GET:/GetProducts
+     * @secure
+     */
+    productGetProducts: (
+      query?: {
+        /** @format int32 */
+        page?: number;
+        /** @format int32 */
+        resultsPerPage?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ProductDto[], any>({
+        path: `/GetProducts`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  createProduct = {
+    /**
+     * No description
+     *
+     * @tags Product
+     * @name ProductCreateProduct
+     * @request POST:/CreateProduct
+     * @secure
+     */
+    productCreateProduct: (
+      query?: {
+        ProductName?: string;
+        /** @format decimal */
+        ProductPrice?: number;
+        /** @format int32 */
+        Inventory?: number;
+        CategoryId?: string;
+        "Seller.UserId"?: string;
+        "Seller.Username"?: string;
+        "Seller.PasswordHash"?: string;
+        "Seller.Role"?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ProductDto, any>({
+        path: `/CreateProduct`,
+        method: "POST",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  mine = {
+    /**
+     * No description
+     *
+     * @tags Product
+     * @name ProductGetMyProducts
+     * @request GET:/mine
+     * @secure
+     */
+    productGetMyProducts: (params: RequestParams = {}) =>
+      this.request<ProductDto[], any>({
+        path: `/mine`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  id = {
+    /**
+     * No description
+     *
+     * @tags Product
+     * @name ProductUpdateProduct
+     * @request PUT:/{id}
+     * @secure
+     */
+    productUpdateProduct: (
+      id: string,
+      query?: {
+        ProductName?: string;
+        /** @format decimal */
+        ProductPrice?: number;
+        /** @format int32 */
+        Inventory?: number;
+        CategoryId?: string;
+        "Seller.UserId"?: string;
+        "Seller.Username"?: string;
+        "Seller.PasswordHash"?: string;
+        "Seller.Role"?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ProductDto, any>({
+        path: `/${id}`,
+        method: "PUT",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Product
+     * @name ProductDeleteProduct
+     * @request DELETE:/{id}
+     * @secure
+     */
+    productDeleteProduct: (id: string, params: RequestParams = {}) =>
+      this.request<Blob, any>({
+        path: `/${id}`,
+        method: "DELETE",
+        secure: true,
         ...params,
       }),
   };

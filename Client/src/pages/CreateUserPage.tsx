@@ -1,7 +1,7 @@
-import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router";
+import {type FormEvent, useState} from "react";
+import {useNavigate} from "react-router";
 import toast from "react-hot-toast";
-import { Api } from "../Api.ts";
+import {Api} from "../../Api.ts";
 
 const api = new Api();
 

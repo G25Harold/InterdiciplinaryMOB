@@ -6,11 +6,14 @@
 using System.ComponentModel.DataAnnotations;
 using Infra;
 using LinqToDB;
+using Service.RequestDtos;
 using Service.Security;
 
 public class UserService(
     MyDatabaseConnection db,
-    IPasswordHasher passswordHasher)
+    IPasswordHasher passwordHasher,
+    ITokenService  tokenService)
+
 {
     public UserDto CreateUser(CreateUserRequestDto userRequestDto)
     {
@@ -24,13 +27,13 @@ public class UserService(
             throw new ValidationException("Username already exists");
 
         string passwordHash =
-            passswordHasher.HashAndSaltPassword(userRequestDto.Password);
+            passwordHasher.HashAndSaltPassword(userRequestDto.Password);
         var user = new User()
         {
             UserId = Guid.NewGuid().ToString(),
             Username = userRequestDto.Username,
             PasswordHash = passwordHash,
-            Role = "User"
+            Role = UserRoles.User
         };
         db.Insert(user);
 
@@ -39,19 +42,35 @@ public class UserService(
         
     }
 
-    public UserDto? Login(LoginRequestDto loginRequestDto)
+    public LoginResponseDto? Login(LoginRequestDto loginRequestDto)
     {
         var user = db.Users
             .FirstOrDefault(u => u.Username == loginRequestDto.Username);
         
         if (user == null)
             return null;
+        
         bool passwordIsValid =
-            passswordHasher.VerifyHashedPassword(
+            passwordHasher.VerifyHashedPassword(
                 loginRequestDto.Password,
                 user.PasswordHash);
+        
         if (!passwordIsValid)
             return null;
-        return new UserDto(user);
+
+        return new LoginResponseDto
+        {
+            Token = tokenService.CreateToken(user),
+            User = new UserDto(user)
+        };
+    }
+
+    public object? GetById(string userId)
+    {
+        var user = db.Users
+            .FirstOrDefault(u => u.UserId == userId);
+        return user is null
+            ? null
+            : new UserDto(user);
     }
 }
