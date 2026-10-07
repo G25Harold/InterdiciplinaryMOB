@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Infra;
 using LinqToDB;
+using Service.RequestDtos;
 
 public class OrderService(MyDatabaseConnection db)
 {

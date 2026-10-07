@@ -1,6 +1,6 @@
 ﻿namespace Service.RequestDtos;
 
-public class CreateOrderDto
+public class CreateOrderRequestDto
 {
     public string ProductId { get; set; }
     public int Quantity { get; set; }
