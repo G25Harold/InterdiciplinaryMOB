@@ -62,8 +62,6 @@ builder.Services.AddScoped<ITokenService>(_ => new JwtTokenService(
 
 
 
-builder.Services.AddScoped<MyDatabaseConnection>(_ =>
-    new MyDatabaseConnection(options));
 
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ProductService>();
