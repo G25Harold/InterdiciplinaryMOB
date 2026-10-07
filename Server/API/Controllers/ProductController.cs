@@ -1,6 +1,8 @@
-﻿using Infra;
+﻿using System.Security.Claims;
+using Infra;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+[Authorize]
 public class ProductController(ProductService service) : ControllerBase
 {
     [HttpGet(nameof(GetProducts))]
@@ -10,9 +12,42 @@ public class ProductController(ProductService service) : ControllerBase
     }
 
     [HttpPost(nameof(CreateProduct))]
-
-    public ProductDto CreateProduct(CreateProductRequestDto productRequestDto)
+    public ProductDto CreateProduct(CreateProductRequestDto dto)
     {
-      return service.CreateProduct(productRequestDto);
+        var sellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (sellerId is null)
+            throw new UnauthorizedAccessException(); 
+        return service.CreateProduct(dto, sellerId);
+    }
+
+    [HttpGet("mine")]
+    public ActionResult<List<ProductDto>> GetMyProducts()
+    {
+        var sellerId =
+            User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (sellerId is null)
+            return Unauthorized();
+        return Ok(service.GetMyProducts(sellerId));
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult<ProductDto> UpdateProduct(string id, UpdateProductRequestDto dto)
+    {
+        var sellerId =
+            User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (sellerId is null)
+            return Unauthorized();
+        return Ok(service.UpdateProduct(id, dto, sellerId));
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteProduct(string id)
+    {
+        var sellerId =
+            User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (sellerId is null)
+            return Unauthorized();
+        service.DeleteProduct(id, sellerId);
+        return NoContent();
     }
 }

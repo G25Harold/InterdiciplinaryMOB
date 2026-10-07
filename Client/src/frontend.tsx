@@ -9,7 +9,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import {Toaster} from "react-hot-toast";
-import {Routing} from "@/Routing.tsx";
+import {Routing} from "@/routing/Routing.tsx";
+import {AuthProvider} from "@/AuthContext.tsx";
 
 
 
@@ -17,7 +18,10 @@ const elem = document.getElementById("root")!;
 const app = (
   <StrictMode>
       <Toaster position="top-right" />
-    <Routing />
+      <AuthProvider>
+          <Routing />
+      </AuthProvider>
+
   </StrictMode>
 );
 

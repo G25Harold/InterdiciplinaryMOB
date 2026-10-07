@@ -62,16 +62,31 @@ builder.Services.AddScoped<ITokenService>(_ => new JwtTokenService(
 
 
 
-builder.Services.AddScoped<MyDatabaseConnection>(_ =>
-    new MyDatabaseConnection(options));
 
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<IPasswordHasher,Argon2PasswordHasher>();
 builder.Services.AddControllers();
-builder.Services.AddOpenApiDocument();
+builder.Services.AddOpenApiDocument(document =>
+{
+    document.DocumentProcessors.Add(
+        new NSwag.Generation.Processors.Security.SecurityDefinitionAppender("Bearer",
+        new NSwag.OpenApiSecurityScheme
+        {
+            Type = NSwag.OpenApiSecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "Enter your JWT bearer token"
+        }));
+    
+    document.OperationProcessors.Add(
+        new NSwag.Generation.Processors.Security
+            .AspNetCoreOperationSecurityScopeProcessor("Bearer"));
+});
+
 builder.Services.AddCors();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<MyExceptionHandler>();

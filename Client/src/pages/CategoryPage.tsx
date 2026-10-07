@@ -1,8 +1,10 @@
 import {useEffect, useState} from "react";
-import {Api, type CategoryDto} from "../Api.ts";
+import {type CategoryDto} from "../../Api.ts";
 import toast from "react-hot-toast";
+import {LogoutButton} from "@/components/LogoutButton.tsx";
+import {api} from "@/apiClient.ts";
 
-const api = new Api();
+
 
 export function CategoryPage() {
     const [categories, setCategories] = useState<CategoryDto[]>([]);
@@ -137,6 +139,6 @@ export function CategoryPage() {
 
                 );
             })}
-        </div>
+            <LogoutButton/> </div>
     );
 }
