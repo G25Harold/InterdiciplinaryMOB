@@ -47,7 +47,7 @@ export default function ProductPage() {
                 console.log(error);
 
                 toast.error(
-                    error?.error?.tittle ?? "Could not complete purchase");
+                    error?.error?.title ?? "Could not complete purchase");
             }
 
         }
