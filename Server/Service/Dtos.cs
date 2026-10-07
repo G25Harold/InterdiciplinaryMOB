@@ -12,6 +12,24 @@ public partial class ProductDto
     public string SellerUsername { get; set; }
 }
 
+
 [Facet(sourceType:typeof(User),exclude:[ nameof(User.PasswordHash)]
-    )]
-    public partial class UserDto;
+)]
+public partial class UserDto;
+
+
+[Facet(sourceType: typeof(Order),
+    exclude:[
+        nameof(Order.Buyer),
+        nameof(Order.Product),
+        nameof(Order.Seller)
+    ])]
+public partial class   OrderDto
+{
+    public string ProductName { get; set; }
+    public string SellerUsername { get; set; }
+}
+
+
+
+    
