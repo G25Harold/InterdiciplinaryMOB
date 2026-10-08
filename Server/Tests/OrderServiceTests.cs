@@ -61,8 +61,10 @@ public class OrderServiceTests
         Assert.Equal(2, savedOrder.Quantity);
     }
     
-    [Fact]
-    public void CreateOrder_ZeroQuantity_ThrowsValidationException()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void CreateOrder_ZeroQuantity_ThrowsValidationException(int quantity)
     {
         var options = new LinqToDB.DataOptions<MyDatabaseConnection>(
             new LinqToDB.DataOptions().UseSQLite("Data Source=:memory:")
@@ -107,4 +109,117 @@ public class OrderServiceTests
 
         Assert.Empty(db.Orders);
     }
+
+    [Fact]
+    public void CreateOrder_ProductNotFound_ThrowsValidationException()
+    {
+        var options = new LinqToDB.DataOptions<MyDatabaseConnection>(
+            new LinqToDB.DataOptions().UseSQLite("Data Source=:memory:")
+        );
+            
+
+        using var db = new MyDatabaseConnection(options);
+
+        db.CreateTable<Product>();
+        db.CreateTable<Order>();
+        
+        var service = new OrderService(db);
+        var request = new CreateOrderRequestDto
+        {
+            ProductId = "does-not-exist",
+            Quantity = 1
+        };
+        var exception = Assert.Throws<ValidationException>(() =>
+            service.CreateOrder(request, "buyer-1"));
+        
+        Assert.Equal(
+            "Product not found",
+            exception.Message);
+        Assert.Empty(db.Orders);
+
+    }
+
+    [Fact]
+    public void CreateOrder_OwnProduct_ThrowsValidationException()
+    {
+        var options = new LinqToDB.DataOptions<MyDatabaseConnection>(
+            new LinqToDB.DataOptions().UseSQLite("Data Source=:memory:")
+        );
+
+        using var db = new MyDatabaseConnection(options);
+
+        db.CreateTable<Product>();
+        db.CreateTable<Order>();
+
+        var product = new Product
+        {
+            ProductId = "product-1",
+            ProductName = "Test Product",
+            ProductPrice = 100m,
+            Inventory = 5,
+            CategoryId = "category-1",
+            SellerId = "user-1"
+        };
+        db.Insert(product);
+        
+        var service = new OrderService(db);
+        var request = new CreateOrderRequestDto
+        {
+            ProductId = "product-1",
+            Quantity = 1
+        };
+        var exception = Assert.Throws<ValidationException>(() =>
+            service.CreateOrder(request, "user-1"));
+        
+        Assert.Equal("You cannot buy your own product", exception.Message);
+        
+        var updatedProduct = db.Products
+            .First(p => p.ProductId == "product-1");
+        
+        Assert.Equal(5, updatedProduct.Inventory);
+        Assert.Empty(db.Orders);
+
+    }
+
+    [Fact]
+    public void CreateOrder_InsufficientInventory_ThrowsValidationException()
+    {
+        var options = new LinqToDB.DataOptions<MyDatabaseConnection>(
+            new LinqToDB.DataOptions().UseSQLite("Data Source=:memory:")
+        );
+
+
+        using var db = new MyDatabaseConnection(options);
+
+        db.CreateTable<Product>();
+        db.CreateTable<Order>();
+
+        var product = new Product
+        {
+            ProductId = "product-1",
+            ProductName = "Test Product",
+            ProductPrice = 100m,
+            Inventory = 2,
+            CategoryId = "category-1",
+            SellerId = "seller-1"
+        };
+
+        db.Insert(product);
+        var service = new OrderService(db);
+        var request = new CreateOrderRequestDto
+        {
+            ProductId = "product-1",
+            Quantity = 3
+        };
+        var exception = Assert.Throws<ValidationException>(() =>
+            service.CreateOrder(request, "buyer-1"));
+        Assert.Equal("Not enough inventory", exception.Message);
+        
+        var updatedProduct = db.Products
+            .First(p => p.ProductId == "product-1");
+        
+        Assert.Equal(2, updatedProduct.Inventory);
+        Assert.Empty(db.Orders);
+    }
+
 }
