@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {type ProductDto} from "../../Api.ts";
-import {LogoutButton} from "@/components/LogoutButton.tsx";
 import {api} from "@/apiClient.ts";
 import toast from "react-hot-toast";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 
 export default function ProductPage() {
@@ -47,7 +47,7 @@ export default function ProductPage() {
                 console.log(error);
 
                 toast.error(
-                    error?.error?.tittle ?? "Could not complete purchase");
+                    error?.error?.title ?? "Could not complete purchase");
             }
 
         }
@@ -62,32 +62,63 @@ export default function ProductPage() {
             }));
         }
 
-        return (
-            <div className="app">
-                <h1>Products</h1>
+    return (
+        <div className="page-container">
+            <NavigationButtons />
 
-                {
-                    products.map(product => (
-                        <div key={product.productId}>
-                            <h2>{product.productName}</h2>
+            <h1 className="page-title">
+                Products
+            </h1>
 
-                            <p>Price: {product.productPrice}</p>
-                            <p>Inventory: {product.inventory}</p>
+            <div className="products-grid">
+                {products.map(product => (
+                    <div
+                        className="product-card"
+                        key={product.productId}
+                    >
+                        <div>
+                            <h2>
+                                {product.productName}
+                            </h2>
 
                             <p>
-                                Category: {product.category?.categoryName}
+                                Price:{" "}
+                                <strong>
+                                    {product.productPrice}
+                                </strong>
                             </p>
 
                             <p>
-                                Seller: {product.sellerUsername}
+                                Seller:{" "}
+                                <strong>
+                                    {product.sellerUsername}
+                                </strong>
                             </p>
 
+                            <p>
+                                Inventory:{" "}
+                                <strong>
+                                    {product.inventory}
+                                </strong>
+                            </p>
+
+                            <p>
+                                Category:{" "}
+                                <strong>
+                                    {product.category?.categoryName}
+                                </strong>
+                            </p>
+                        </div>
+
+                        <div className="product-purchase">
                             <input
                                 type="number"
                                 min="1"
                                 max={product.inventory}
                                 value={
-                                    quantities[product.productId ?? ""] ?? 1
+                                    quantities[
+                                    product.productId ?? ""
+                                        ] ?? 1
                                 }
                                 disabled={!product.inventory}
                                 onChange={event =>
@@ -100,17 +131,18 @@ export default function ProductPage() {
 
                             <button
                                 disabled={!product.inventory}
-                                onClick={() => handleBuy(product)}
+                                onClick={() =>
+                                    handleBuy(product)
+                                }
                             >
                                 Buy
                             </button>
                         </div>
-                    ))
-                }
-
-                <LogoutButton/>
+                    </div>
+                ))}
             </div>
-        );
+        </div>
+    );
     }
 
 
