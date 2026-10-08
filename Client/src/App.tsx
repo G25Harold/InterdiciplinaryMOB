@@ -1,14 +1,12 @@
 import "./index.css";
-import {useNavigate} from "react-router";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 export function App() {
-    const navigate = useNavigate();
 
     return (
         <div className="app">
+            <NavigationButtons />
             <h1>Welcome To My Amazing Satin Road</h1>
-            <button onClick={() => navigate("/login")}>Log In</button>
-            <button onClick={() => navigate("/create-user")}>Create user</button>
         </div>
     );
 }

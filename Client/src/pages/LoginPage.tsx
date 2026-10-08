@@ -4,6 +4,7 @@ import {useNavigate} from "react-router";
 import toast from "react-hot-toast";
 import {api} from "@/apiClient.ts";
 import {useAuth} from "@/AuthContext.tsx";
+import {NavigationButtons} from "@/components/NavigationButtons.tsx";
 
 
 export function LoginPage() {
@@ -41,36 +42,51 @@ export function LoginPage() {
             toast.error("Invalid username or password");
         }
     }
-    return(
-    <div>
-        <h1> Login </h1>
-        <form onSubmit={handleSubmit}>
+    return (
+        <div className="page-container">
+            <NavigationButtons />
 
-            <div>
-                <label>
-                    Username
-                    <input
-                    type="text"
-                    value={username}
-                    onChange={(event)=> setUsername(event.target.value)}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                Password
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(event)=> setPassword(event.target.value)}
-                />
-                    </label>
-            </div>
-            <button type="submit">
-                Log in
-            </button>
-        </form>
+            <div className="form-page">
+                <h1 className="page-title">Login</h1>
 
-    </div>
+                <div className="form-card">
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-field">
+                            <label>
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(event) =>
+                                    setUsername(event.target.value)
+                                }
+                            />
+                        </div>
+
+                        <div className="form-field">
+                            <label>
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(event) =>
+                                    setPassword(event.target.value)
+                                }
+                            />
+                        </div>
+
+                        <div className="form-actions">
+                            <button type="submit">
+                                Log in
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 }
