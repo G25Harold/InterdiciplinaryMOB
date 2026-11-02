@@ -63,7 +63,7 @@ builder.Services.AddScoped<ITokenService>(_ => new JwtTokenService(
 
 
 
-builder.Services.AddScoped<Seeder>();
+
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CategoryService>();

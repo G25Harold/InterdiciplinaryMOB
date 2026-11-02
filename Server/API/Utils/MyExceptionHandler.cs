@@ -10,6 +10,7 @@ public class MyExceptionHandler : IExceptionHandler
     {
         httpContext.Response.StatusCode = 400;
         
+        
         await httpContext.Response.WriteAsJsonAsync(
             new ProblemDetails()
             {
