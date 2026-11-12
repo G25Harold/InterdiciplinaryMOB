@@ -3,6 +3,7 @@ using LinqToDB;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Security;
+using YamlDotNet.Serialization;
 
 namespace Tests;
 
@@ -19,11 +20,13 @@ public class AuthorizationTests
         var userService = new UserService(
             db,
             new Argon2PasswordHasher(),
-            new JwtTokenService(
+            new JwtTokenService(new JwtSettings
+            {
                 "this-is-a-test-key-that-is-long-enough",
                 "test-issuer",
                 "test-audience",
-                60));
+                60
+            }));
         
         var controller = new UserController(userService);
 
