@@ -6,11 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Service.Security;
 
-public class JwtTokenService(
-    string key,
-    string issuer,
-    string audience,
-    int expiresMinutes) : ITokenService
+public class JwtTokenService(JwtSettings settings) : ITokenService
 {
     public string CreateToken(User user)
     {
@@ -21,17 +17,17 @@ public class JwtTokenService(
             new Claim(ClaimTypes.Role, user.Role)
         };
         var securityKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(key));
+            Encoding.UTF8.GetBytes(settings.Key));
         
         var credentials = new SigningCredentials(
             securityKey,
             SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
+            issuer: settings.Issuer,
+            audience: settings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(expiresMinutes),
+            expires: DateTime.UtcNow.AddMinutes(settings.ExpiresMinutes),
             signingCredentials: credentials
         );
         return new JwtSecurityTokenHandler()
