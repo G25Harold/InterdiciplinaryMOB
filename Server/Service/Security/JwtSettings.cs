@@ -1,6 +1,6 @@
 namespace Service.Security;
 
-public class JwtSettings
+public sealed class JwtSettings
 {
     public const string SectionName = "Jwt";
 
