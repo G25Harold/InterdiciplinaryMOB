@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Infra;
 using LinqToDB;
-using LinqToDB.Async;
 using Service.RequestDtos;
 
 public class OrderService(MyDatabaseConnection db)
@@ -46,9 +45,9 @@ public class OrderService(MyDatabaseConnection db)
         return order;
     }
 
-    public async Task<List<OrderDto>> GetMyOrders(string buyerId)
+    public List<OrderDto> GetMyOrders(string buyerId)
     {
-        return await db.Orders
+        return db.Orders
             .Where(o=> o.BuyerId == buyerId)
             .LoadWith(o => o.Product)
             .LoadWith(o =>o.Seller)
@@ -58,7 +57,6 @@ public class OrderService(MyDatabaseConnection db)
                 ProductName = o.Product.ProductName,
                 SellerUsername = o.Seller.Username
             })
-            .ToListAsync();
-        
+            .ToList();
     }
 }
